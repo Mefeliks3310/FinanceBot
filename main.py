@@ -238,31 +238,168 @@ def Test_1(message):
     c = types.KeyboardButton('c')
     coin = 0
     markup.row(a,b,c)
-    t1 = bot.send_photo(message.chat.id,"https://1drv.ms/i/c/d59c6f998f225afd/IQMVAjrglX9yToDT5vvL_hnbAci3TqZ-HF57MgBreqwj7wA?width=936&height=682", caption="<b>Что такое финансы?</b>"
+    bot.send_photo(message.chat.id,"https://1drv.ms/i/c/d59c6f998f225afd/IQMVAjrglX9yToDT5vvL_hnbAci3TqZ-HF57MgBreqwj7wA?width=936&height=682", caption="<b>Что такое финансы?</b>"
                                                "\n\na) Совокупность денег, активов и ресурсов, которыми располагают только физические лица. "
                                                "\n\nb) Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица."
                                                "\n\nc) Наличные деньги и банковские счета.", parse_mode="HTML",reply_markup=markup)
-    answered = False
-    while not answered:
-        message = bot.wait_for_message(message.chat.id)
-        if message.text == 'a':
-            bot.send_message(message.chat.id, "Неправильный ответ. ❌\n\n"
-                                              "Правильный ответ: Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица.")
-            answered = True
-        elif message.text == 'b':
-            bot.send_message(message.chat.id, "Правильный ответ! ✅")
-            coin += 1
-            answered = True
-        elif message.text == 'c':
-            bot.send_message(message.chat.id, "Неправильный ответ. ❌\n\n"
-                                              "Правильный ответ: Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица.")
-            answered = True
-        else:
-            bot.send_message(message.chat.id, "Пожалуйста, выберите один из вариантов ответа (a, b или c).")
+    bot.register_next_step_handler(message,t1a1)
 
-    # Удаляем сообщение с вопросом
-    bot.delete_message(message.chat.id, t1.message_id)
 
+def t1a1(message):
+    if message.text == "b":
+        bot.send_message(message.chat.id,"Правильный ответ!✅")
+        bot.delete_message(message.chat.id,message.message_id-1)
+        time.sleep(2)
+        bot.delete_message(message.chat.id,message.message_id+1)
+        t1q2(message)
+
+    else:
+        bot.send_message(message.chat.id, "Неправильный овтет ❌"
+                                          "\n\nПравильый ответ - Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, message.message_id-1)
+        bot.delete_message(message.chat.id, message.message_id+1)
+        t1q2(message)
+def t1q2(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    coin = 0
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQO_jvdKPTWXTba-a7nXuMgJAe9wgjvyKPIFz9qKeienNlw?width=1024",
+                   caption="<b>Какую роль играют финансы в экономической системе?</b>"
+                           "\n\na) Они не играют никакой роли."
+                           "\n\nb) Они только уменьшают расходы и поддерживают международный рынок."
+                           "\n\nc) Они обеспечивают потоки денежных средств и финансовые операции.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t1a2)
+
+def t1a2(message):
+    if message.text == "c":
+        bot.send_message(message.chat.id,"Правильный ответ!✅")
+        bot.delete_message(message.chat.id,message.message_id-1)
+        time.sleep(2)
+        bot.delete_message(message.chat.id,message.message_id+1)
+        t1q3(message)
+
+    else:
+        bot.send_message(message.chat.id, "Неправильный овтет ❌"
+                                          "\n\nПравильый ответ - Они обеспечивают потоки денежных средств и финансовые операции.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, message.message_id-1)
+        bot.delete_message(message.chat.id, message.message_id+1)
+        t1q3(message)
+def t1q3(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    coin = 0
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQPOctGtBSvlRKp-YYFKeBc1ASUov30aELiCDGN69eki6dM?width=1024",
+                   caption="<b>Что включают корпоративные финансы?</b>"
+                           "\n\na) Управление государственным долгом и налоговой политикой."
+                           "\n\nb) Управление финансами предприятий и компаний, включая планирование, капитал и инвестиции."
+                           "\n\nc) Только управление доходами и расходами физических лиц.", parse_mode="HTML",
+                   reply_markup=markup)
+    bot.register_next_step_handler(message, t1a3)
+def t1a3(message):
+    if message.text == "b":
+        bot.send_message(message.chat.id,"Правильный ответ!✅")
+        bot.delete_message(message.chat.id,message.message_id-1)
+        time.sleep(2)
+        bot.delete_message(message.chat.id,message.message_id+1)
+        t1q4(message)
+
+    else:
+        bot.send_message(message.chat.id, "Неправильный овтет ❌"
+                                          "\n\nУправление финансами предприятий и компаний, включая планирование, капитал и инвестиции.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, message.message_id-1)
+        bot.delete_message(message.chat.id, message.message_id+1)
+        t1q4(message)
+def t1q4(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    coin = 0
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQMUuxkgkqRGSqcTncWYKm58ASFzYoGMvV9OxBKZUEsCP2U?width=1024",
+                   caption="<b>Что включают личные финансы?</b>"
+                           "\n\na) Управление доходами, расходами, сбережениями и инвестициями."
+                           "\n\nb) Только планирование пенсии."
+                           "\n\nc) Управление государственным бюджетом.", parse_mode="HTML",
+                   reply_markup=markup)
+    bot.register_next_step_handler(message, t1a4)
+def t1a4(message):
+    if message.text == "a":
+        bot.send_message(message.chat.id,"Правильный ответ!✅")
+        bot.delete_message(message.chat.id,message.message_id-1)
+        time.sleep(2)
+        bot.delete_message(message.chat.id,message.message_id+1)
+        t1q5(message)
+
+    else:
+        bot.send_message(message.chat.id, "Неправильный овтет ❌"
+                                          "\n\nУправление доходами, расходами, сбережениями и инвестициями.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, message.message_id-1)
+        bot.delete_message(message.chat.id, message.message_id+1)
+        t1q5(message)
+def t1q5(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    coin = 0
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQN8ja6mJFZWSJyZuCAp2sSAAQNR6ULUfZJgfjfDrzz4QOs?width=1024",
+                   caption="<b>Как финансовая грамотность помогает в жизни?</b>"
+                           "\n\na) Мне ничем, я ведь ничего не знаю :("
+                           "\n\nb) Помогает принимать обоснованные решения, минимизировать риски и достигать финансовых целей."
+                           "\n\nc) Управление государственным бюджетом.", parse_mode="HTML",
+                   reply_markup=markup)
+    bot.register_next_step_handler(message, t1a5)
+def t1a5(message):
+    if message.text == "b":
+        bot.send_message(message.chat.id,"Правильный ответ!✅")
+        bot.delete_message(message.chat.id,message.message_id-1)
+        time.sleep(2)
+        bot.delete_message(message.chat.id,message.message_id+1)
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_
+        bot.send_message(message.chat.id, "Ты справился с тестом! Перейдем к следующему модулю?", reply_markup=markup)
+        bot.register_next_step_handler(message, Lesson_2)
+
+
+    elif message.text == "c":
+        bot.send_message(message.chat.id, "Неправильный овтет ❌"
+                                          "\n\nПомогает принимать обоснованные решения, минимизировать риски и достигать финансовых целей.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, message.message_id-1)
+        bot.delete_message(message.chat.id, message.message_id+1)
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(message.chat.id, "Ты справился с тестом! Перейдем к следующему модулю?",reply_markup=markup)
+        bot.register_next_step_handler(callback.message, Lesson_2)
+    elif message.text == "a":
+        bot.send_message(message.chat.id, "Ничего в этом страшного нет :)\n\nПосмотри следующий видеоролик про финансовую грамотность, чтобы быть осведомленным в этой теме!\n\n(псс правильным ответом был вариант под буквой b)"
+                                          "https://youtu.be/a8kV0zVWRX4?si=n0xZxwZG8lrE0HyR")
+        bot.delete_message(message.chat.id, message.message_id - 1)
+
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(message.chat.id, "Ты справился с тестом! Перейдем к следующему модулю?", reply_markup=markup)
+        bot.register_next_step_handler(message, Lesson_2)
 
 def Lesson_2(message):
     markup = types.ReplyKeyboardRemove()
