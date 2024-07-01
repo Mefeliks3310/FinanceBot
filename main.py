@@ -40,6 +40,28 @@ def main(message):
 def callback_message(callback):
     global amount
     global _help
+
+    if callback.data == 'continue_learning':
+        markup = types.InlineKeyboardMarkup()
+        btn1 = types.InlineKeyboardButton("1. Основы финансов", callback_data="1")
+        btn2 = types.InlineKeyboardButton("2. Финансовые рынки", callback_data="2")
+        btn3 = types.InlineKeyboardButton("3.Финансовые инструменты", callback_data="3")
+        btn4 = types.InlineKeyboardButton("4. Основы инвестирования", callback_data="4")
+        btn5 = types.InlineKeyboardButton("5. Основные финансовые показатели", callback_data="5")
+        markup.add(btn1,btn2,btn3,btn4,btn5)
+        bot.send_message(callback.message.chat.id,"На какому модуле вы остановились?",reply_markup=markup)
+
+    if callback.data == "1":
+        Lesson_1(callback.message)
+    if callback.data == "2":
+        Lesson_2(callback.message)
+    if callback.data == "3":
+        Lesson_3(callback.message)
+    if callback.data == "4":
+        bot.send_message(callback.message.chat.id,"В разработке.")
+    if callback.data == "5":
+        bot.send_message(callback.message.chat.id, "В разработке.")
+
     if callback.data == 'start_learning':
         bot.send_message(callback.message.chat.id, "Отлично! Начнем наше обучение! План состоит из 7 модулей:"
                         "\n<b>1. Основы финансов</b>"
@@ -437,8 +459,176 @@ def Lesson_2(message):
     time.sleep(3)
     bot.send_message(message.chat.id, "Готов к тесту?", reply_markup=markup)
 
+def Test_2(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQMGGBEK7DDHQpb3kUlS-URJAZqZtTaZZCAwwdxC4VGOico?width=1024",
+                   caption="<b>Какую роль играют финансовые рынки в экономике?</b>"
+                           "\n\na) Обеспечивают платформу для обмена финансовыми инструментами и ресурсами."
+                           "\n\nb) Устанавливают налоговые ставки."
+                           "\n\nc) Производят товары и услуги.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t2a1)
+
+def t2a1(message):
+    try:
+        if message.text == "a":
+            bot.send_message(message.chat.id, "Правильный ответ!✅")
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            time.sleep(2)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q2(message)
+        else:
+            bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                              "\n\nПравильный ответ - Обеспечивают платформу для обмена финансовыми инструментами и ресурсами.")
+            time.sleep(5)
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q2(message)
+    except:
+        Test_2(message)
+
+def t2q2(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQMot_3bYwVVT7xWRcSLf8wPAdjH8raIjSvMHpvhCQuofEc?width=1024",
+                   caption="<b>Что такое фондовые рынки?</b>"
+                           "\n\na) Рынки, где торгуют физическими товарами."
+                           "\n\nb) Рынки, где происходит обмен валют."
+                           "\n\nc) Рынки, где компании привлекают капитал, выпуская акции.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t2a2)
+
+def t2a2(message):
+    try:
+        if message.text == "c":
+            bot.send_message(message.chat.id, "Правильный ответ!✅")
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            time.sleep(2)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q3(message)
+        else:
+            bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                              "\n\nПравильный ответ - Рынки, где компании привлекают капитал, выпуская акции.")
+            time.sleep(5)
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q3(message)
+    except:
+        t2q2(message)
+def t2q3(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQNhRCg5X4QWTLEdSR0l9MdLAW2LmZQNpoFR6W12IPkjTWM?width=1024",
+                   caption="<b>Кто являются основными участниками валютных рынков?</b>"
+                           "\n\na) Производители товаров."
+                           "\n\nb) Центральные и коммерческие банки, корпорации и индивидуальные трейдеры."
+                           "\n\nc) Государственные органы.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t2a3)
+
+def t2a3(message):
+    try:
+        if message.text == "b":
+            bot.send_message(message.chat.id, "Правильный ответ!✅")
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            time.sleep(2)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q4(message)
+        else:
+            bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                              "\n\nПравильный ответ - Центральные и коммерческие банки, корпорации и индивидуальные трейдеры.")
+            time.sleep(5)
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q4(message)
+    except:
+        t2q3(message)
+
+def t2q4(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQMNIs3Y0b7-SI62ufMuKok-AROmhkxxOAtJOI-4UHmyRsQ?width=1024",
+                   caption="<b>Что такое хеджирование?</b>"
+                           "\n\na) Процесс покупки недвижимости."
+                           "\n\nb) Стратегия управления рисками."
+                           "\n\nc) Способ установления цен на товары.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t2a4)
+
+def t2a4(message):
+    try:
+        if message.text == "b":
+            bot.send_message(message.chat.id, "Правильный ответ!✅")
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            time.sleep(2)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q5(message)
+        else:
+            bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                              "\n\nПравильный ответ - Стратегия управления рисками.")
+            time.sleep(5)
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            t2q5(message)
+    except:
+        t2q4(message)
+
+def t2q5(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+    bot.send_photo(message.chat.id,
+                   "https://1drv.ms/i/c/d59c6f998f225afd/IQPne9wcuZ0ZQq5YHCo0AvxYAXwb1XAYApdVHT_qnviGloI?width=1024",
+                   caption="<b>Какую роль играют брокеры на финансовых рынках?</b>"
+                           "\n\na) Создают новые финансовые инструменты."
+                           "\n\nb) Помогают инвесторам и трейдерам покупать и продавать финансовые инструменты."
+                           "\n\nc) Контролируют и регулируют деятельность финансовых рынков.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t2a5)
+
+def t2a5(message):
+    try:
+        if message.text == "b":
+            bot.send_message(message.chat.id, "Правильный ответ!✅")
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            time.sleep(2)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            markup = types.ReplyKeyboardMarkup()
+            btn_con = types.KeyboardButton("Продолжить")
+            markup.add(btn_con)
+            bot.send_message(message.chat.id, "Ты справился с тестом! Перейдем к следующему модулю?", reply_markup=markup)
+            bot.register_next_step_handler(message, Lesson_3)
+        else:
+            bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                              "\n\nПравильный ответ - Помогают инвесторам и трейдерам покупать и продавать финансовые инструменты.")
+            time.sleep(5)
+            bot.delete_message(message.chat.id, message.message_id - 1)
+            bot.delete_message(message.chat.id, message.message_id + 1)
+            markup = types.ReplyKeyboardMarkup()
+            btn_con = types.KeyboardButton("Продолжить")
+            markup.add(btn_con)
+            bot.send_message(message.chat.id, "Ты справился с тестом! Перейдем к следующему модулю?", reply_markup=markup)
+            bot.register_next_step_handler(message, Lesson_3)
+    except:
+        t2a5(message)
+
 def Lesson_3(message):
-    bot.send_message(message.chat.id,"Модуль 3 - Товарные рынки - на стадии разработки.")
+    markup = types.ReplyKeyboardRemove()
+    bot.send_message(message.chat.id,"Модуль 3 - Товарные рынки - на стадии разработки.",reply_markup=markup)
 
 
 
