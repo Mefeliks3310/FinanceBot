@@ -50,6 +50,7 @@ def callback_message(callback):
                          "\n<b>6. Личные финансы</b>"
                          "\n<b>7. Экономические понятия</b>"
                         '\n\n Начнем с первого модуля "Основы финансов"', parse_mode= "HTML")
+        time.sleep(3)
         bot.send_message(callback.message.chat.id, "Обучение будет проходить в следующем формате по частям:"
                                                    "\n<b>1 часть</b> - теоретический материал"
                                                    "\n<b>2 часть</b> - тест, на проверку усвоенного материала (тест всегда можно пропустить при желании)"
@@ -61,10 +62,19 @@ def callback_message(callback):
         btn_con = types.KeyboardButton("Продолжить")
         markup.add(btn_con)
         bot.send_message(callback.message.chat.id, "Тогда переходим к следующему модулю!",reply_markup=markup)
+        bot.register_next_step_handler(callback.message, Lesson_2)
+    if callback.data == "skip_test_2":
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(callback.message.chat.id, "Тогда переходим к следующему модулю!", reply_markup=markup)
+        bot.register_next_step_handler(callback.message, Lesson_3)
 
-        bot.register_next_step_handler(callback.message,Lesson_2)
     if callback.data == "start_test_1":
         Test_1(callback.message)
+
+    if callback.data == "start_test_2":
+        Test_2(callback.message)
 
     if callback.data == "tools_fenance":
         markup = types.InlineKeyboardMarkup()
@@ -216,8 +226,11 @@ def News(message):
     News(message)
 def Lesson_1(message):
     bot.send_message(message.chat.id, "Это твой первый урок! Здесь тебе дается статья и краткая вЫжимка этой статьи.\n\nТакже можешь посмотреть видеоролик на ютубе про <b>ФИНАНСОВУЮ ГРАМОТНОСТЬ!</b>",parse_mode="HTML")
+    time.sleep(3)
     bot.send_message(message.chat.id,"https://telegra.ph/Osnovy-finansov-06-30-2")
+    time.sleep(3)
     bot.send_message(message.chat.id, "https://www.youtube.com/watch?v=S88HZWjuVZg")
+    time.sleep(3)
     bot.send_message(message.chat.id,"""<b>Главное о финансах в 5 пунктах:</b>\n
 1 - Финансы представляют собой все деньги, которые находятся в обращении и используются государством, бизнесом и физическими лицами для увеличения богатства и достижения финансовой стабильности.\n
 2 - Существуют различные виды финансов: личные финансы, корпоративные финансы, государственные финансы, общественные финансы и международные финансы. Каждый вид финансов имеет свои особенности и характеристики.\n
@@ -229,6 +242,7 @@ def Lesson_1(message):
     btn_skip = types.InlineKeyboardButton("Пропустить тест",callback_data="skip_test_1")
     btn_start = types.InlineKeyboardButton("Начать тест",callback_data="start_test_1")
     markup.add(btn_start,btn_skip)
+    time.sleep(3)
     bot.send_message(message.chat.id,"Готов к тесту?",reply_markup=markup)
 
 def Test_1(message):
@@ -374,7 +388,6 @@ def t1a5(message):
         markup = types.ReplyKeyboardMarkup()
         btn_con = types.KeyboardButton("Продолжить")
         markup.add(btn_con)
-        bot.send_
         bot.send_message(message.chat.id, "Ты справился с тестом! Перейдем к следующему модулю?", reply_markup=markup)
         bot.register_next_step_handler(message, Lesson_2)
 
@@ -403,7 +416,32 @@ def t1a5(message):
 
 def Lesson_2(message):
     markup = types.ReplyKeyboardRemove()
-    bot.send_message(message.chat.id, "второй урок", reply_markup=markup)
+    bot.send_message(message.chat.id, "Это второй модуль и он посвящен <b>ФИНАНСОВЫМ РЫНКАМ.</b>\n\nНа вооружении у тебя есть статья с темой модуля и несколько видеороликов на ютубе. Начнем! ", reply_markup=markup,parse_mode="HTML")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Статья:\n\nhttps://telegra.ph/Finansovyj-rynok-07-01")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Видеорлик про финансовый рынок:\n\nhttps://www.youtube.com/watch?v=90O3YqZi9v4")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Видеорлик про биржу:\n\nhttps://www.youtube.com/watch?v=HzEVqIMtfGU")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Видеоролик про внебиржевой рынок:\n\nhttps://youtu.be/vJyzEKZuh5Y?si=Znj4iCjYZkBuRB7U")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Видеоролик про основных участников рынка:\n\nhttps://www.youtube.com/watch?v=t2zWK3KdWFU")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"А также словарь биржевых терминов :)\n\nhttps://youtu.be/AVviPv367Vg?si=xb9bslOMr9k40vo_")
+    time.sleep(3)
+    markup = types.InlineKeyboardMarkup()
+    btn_skip = types.InlineKeyboardButton("Пропустить тест", callback_data="skip_test_2")
+    btn_start = types.InlineKeyboardButton("Начать тест", callback_data="start_test_2")
+    markup.add(btn_start, btn_skip)
+    time.sleep(3)
+    bot.send_message(message.chat.id, "Готов к тесту?", reply_markup=markup)
+
+def Lesson_3(message):
+    bot.send_message(message.chat.id,"Модуль 3 - Товарные рынки - на стадии разработки.")
+
+
+
 @bot.message_handler()
 def info(message):
     if any(word in message.text.lower() for word in ["хр","хрю","оньк","🐽"]):
