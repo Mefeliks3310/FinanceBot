@@ -56,6 +56,16 @@ def callback_message(callback):
                                                    "\n\nНу чтож, начнем! (ураа напиши начнем! вухуу)", parse_mode= "HTML")
         bot.register_next_step_handler(callback.message,Lesson_1)
 
+    if callback.data == "skip_test_1":
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(callback.message.chat.id, "Тогда переходим к следующему модулю!",reply_markup=markup)
+
+        bot.register_next_step_handler(callback.message,Lesson_2)
+    if callback.data == "start_test_1":
+        Test_1(callback.message)
+
     if callback.data == "tools_fenance":
         markup = types.InlineKeyboardMarkup()
         btn1 = types.InlineKeyboardButton("Конвертация валют", callback_data= "converter")
@@ -205,7 +215,7 @@ def News(message):
     time.sleep(60)
     News(message)
 def Lesson_1(message):
-    bot.send_message(message.chat.id, "Это твой первый урок! Здесь тебе дается статья и краткая вЫжимка этой статьи\nТакже есть можешь посмотреть видеоролик на ютубе про <b>ФИНАНСОВУЮ ГРАМОТНОСТЬ!</b>",parse_mode="HTML")
+    bot.send_message(message.chat.id, "Это твой первый урок! Здесь тебе дается статья и краткая вЫжимка этой статьи.\n\nТакже можешь посмотреть видеоролик на ютубе про <b>ФИНАНСОВУЮ ГРАМОТНОСТЬ!</b>",parse_mode="HTML")
     bot.send_message(message.chat.id,"https://telegra.ph/Osnovy-finansov-06-30-2")
     bot.send_message(message.chat.id, "https://www.youtube.com/watch?v=S88HZWjuVZg")
     bot.send_message(message.chat.id,"""<b>Главное о финансах в 5 пунктах:</b>\n
@@ -215,6 +225,48 @@ def Lesson_1(message):
 4 - Управление финансами включает планирование, оперативное управление и контроль. Планирование позволяет определить финансовые цели и стратегии, оперативное управление обеспечивает эффективное использование ресурсов, а контроль помогает оценить результаты и корректировать действия.\n
 5 - Знание основ управления финансами имеет важное значение для финансовой устойчивости, принятия обоснованных решений о распределении средств, инвестировании и достижении финансовых целей как для физических лиц, так и для бизнеса и государства."""
                      ,parse_mode="HTML")
+    markup = types.InlineKeyboardMarkup()
+    btn_skip = types.InlineKeyboardButton("Пропустить тест",callback_data="skip_test_1")
+    btn_start = types.InlineKeyboardButton("Начать тест",callback_data="start_test_1")
+    markup.add(btn_start,btn_skip)
+    bot.send_message(message.chat.id,"Готов к тесту?",reply_markup=markup)
+
+def Test_1(message):
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    coin = 0
+    markup.row(a,b,c)
+    t1 = bot.send_photo(message.chat.id,"https://1drv.ms/i/c/d59c6f998f225afd/IQMVAjrglX9yToDT5vvL_hnbAci3TqZ-HF57MgBreqwj7wA?width=936&height=682", caption="<b>Что такое финансы?</b>"
+                                               "\n\na) Совокупность денег, активов и ресурсов, которыми располагают только физические лица. "
+                                               "\n\nb) Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица."
+                                               "\n\nc) Наличные деньги и банковские счета.", parse_mode="HTML",reply_markup=markup)
+    answered = False
+    while not answered:
+        message = bot.wait_for_message(message.chat.id)
+        if message.text == 'a':
+            bot.send_message(message.chat.id, "Неправильный ответ. ❌\n\n"
+                                              "Правильный ответ: Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица.")
+            answered = True
+        elif message.text == 'b':
+            bot.send_message(message.chat.id, "Правильный ответ! ✅")
+            coin += 1
+            answered = True
+        elif message.text == 'c':
+            bot.send_message(message.chat.id, "Неправильный ответ. ❌\n\n"
+                                              "Правильный ответ: Совокупность денег, активов и ресурсов, которыми располагают государства, компании и физические лица.")
+            answered = True
+        else:
+            bot.send_message(message.chat.id, "Пожалуйста, выберите один из вариантов ответа (a, b или c).")
+
+    # Удаляем сообщение с вопросом
+    bot.delete_message(message.chat.id, t1.message_id)
+
+
+def Lesson_2(message):
+    markup = types.ReplyKeyboardRemove()
+    bot.send_message(message.chat.id, "второй урок", reply_markup=markup)
 @bot.message_handler()
 def info(message):
     if any(word in message.text.lower() for word in ["хр","хрю","оньк","🐽"]):
