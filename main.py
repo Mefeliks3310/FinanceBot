@@ -5,15 +5,16 @@ from ExchangeRateApi import *
 import requests
 from bs4 import BeautifulSoup
 import time
+import yfinance as yf
 
 bot = telebot.TeleBot('7459337661:AAGB37AI_7e4pYz943iJKC63699MBYhtGuQ')
 api  = ExchangeRateApi("d10bb83f31daf59c5678869e")
-global _help
 global amount
 aft = None
 qft = None
 new_post_url = None
 _help = True
+help_sotck = True
 
 @bot.message_handler(commands=['start'])
 def main(message):
@@ -133,14 +134,24 @@ def callback_message(callback):
         bot.send_message(callback.message.chat.id, "Что тебе нужно?", reply_markup= markup)
 
     if callback.data == "converter":
+        global _help
         if  _help:
             bot.send_message(callback.message.chat.id, 'Как работать с инструментом "Конвертации валют"?'
                                                    '\nДля начала тебе необходимо ввести определённую сумму, которая в последующем будет конвертироваться из одной валюты в другую, например "100".\n'
                                                    '\nПосле, через слэш (это вот такой знак "/") введите буквенный код нужной валюты (RUB/EUR, RUB/USD).'
                                                     '\n\nТакже есть быстрая конвертация валют: USD/RUB и EUR/RUB.')
             _help = False
-        bot.send_message(callback.message.chat.id, "Введите сумму:")
+        markup_con = types.InlineKeyboardMarkup()
+        help_button = types.InlineKeyboardButton("Помощь",callback_data="h_con")
+        markup_con.add(help_button)
+        bot.send_message(callback.message.chat.id, "Введите сумму:",reply_markup=markup_con)
         bot.register_next_step_handler(callback.message, summa)
+    if callback.data == "h_con":
+        bot.send_message(callback.message.chat.id, 'Как работать с инструментом "Конвертации валют"?'
+                                                   '\nДля начала тебе необходимо ввести определённую сумму, которая в последующем будет конвертироваться из одной валюты в другую, например "100".\n'
+                                                   '\nПосле, через слэш (это вот такой знак "/") введите буквенный код нужной валюты (RUB/EUR, RUB/USD).'
+                                                   '\n\nТакже есть быстрая конвертация валют: USD/RUB и EUR/RUB.')
+
     if callback.data == "another":
         markup_ant = types.InlineKeyboardMarkup()
         btn_view = types.InlineKeyboardButton("Посмотреть коды валют", url="https://www.exchangerate-api.com/docs/supported-currencies")
@@ -198,9 +209,96 @@ def callback_message(callback):
                                                    f"\nРезультат конвертации по текущему курсу: {round(float(finaly_text),2)*amount}")
 
     if callback.data == "stock":
-        bot.send_message(callback.message.chat.id, "Акции")
+        Stock(callback.message)
     if callback.data == "news":
         News(callback.message)
+    if callback.data == "list_tickets":
+        bot.send_message(callback.message.chat.id,"""ТОП ПОПУЛЯРНЫХ АКЦИЙ:
+AAPL - Apple Inc.
+MSFT - Microsoft Corporation
+AMZN - Amazon.com Inc.
+GOOGL - Alphabet Inc. (Class A)
+GOOG - Alphabet Inc. (Class C)
+FB - Meta Platforms Inc. (formerly Facebook Inc.)
+TSLA - Tesla Inc.
+BRK.B - Berkshire Hathaway Inc. (Class B)
+NVDA - NVIDIA Corporation
+JPM - JPMorgan Chase & Co.
+JNJ - Johnson & Johnson
+V - Visa Inc.
+PG - Procter & Gamble Company
+UNH - UnitedHealth Group Incorporated
+HD - The Home Depot Inc.
+PYPL - PayPal Holdings Inc.
+DIS - The Walt Disney Company
+MA - Mastercard Incorporated
+BABA - Alibaba Group Holding Limited
+VZ - Verizon Communications Inc.
+MRK - Merck & Co. Inc.
+NFLX - Netflix Inc.
+ADBE - Adobe Inc.
+KO - The Coca-Cola Company
+CMCSA - Comcast Corporation
+PEP - PepsiCo Inc.
+XOM - Exxon Mobil Corporation
+INTC - Intel Corporation
+CSCO - Cisco Systems Inc.
+NVDA - NVIDIA Corporation
+ABBV - AbbVie Inc.
+CRM - Salesforce.com Inc.
+NKE - NIKE Inc.
+WMT - Walmart Inc.
+PFE - Pfizer Inc.
+ABT - Abbott Laboratories
+MCD - McDonald's Corporation
+CVX - Chevron Corporation
+T - AT&T Inc.
+MO - Altria Group Inc.
+AMGN - Amgen Inc.
+BA - The Boeing Company
+LLY - Eli Lilly and Company
+TXN - Texas Instruments Incorporated
+NEE - NextEra Energy Inc.
+IBM - International Business Machines Corporation
+AVGO - Broadcom Inc.
+COST - Costco Wholesale Corporation
+MMM - 3M Company
+UNP - Union Pacific Corporation""")
+        Stock(callback.message)
+    if callback.data == "h_st":
+        global help_sotck
+        help_sotck = True
+        Stock(callback.message)
+
+
+def Stock(message):
+    global help_sotck
+    if help_sotck:
+        bot.send_message(message.chat.id,'Как работать с инструментом "Акции"?'
+                         '\n\nНеобходимо ввести тикерный символ интересующей вас компании, например: "GOOGL"'
+                         '\n\nЕсли вам потребуется список тикерных символов - нажмите на кнопку "список тикерных символов"'
+                                         ' - и вам откроется доступ к 50-ти самых популярных'
+                                         ' тикерных символов во всем мире.')
+        help_sotck = False
+
+    markup = types.InlineKeyboardMarkup()
+    button_help = types.InlineKeyboardButton("Помощь",callback_data = "h_st")
+    buttun_list = types.InlineKeyboardButton("Список тикерных символов",callback_data = "list_tickets")
+    markup.add(buttun_list,button_help)
+    bot.send_message(message.chat.id,"Введите тикерный символ компании: ",reply_markup=markup)
+    bot.register_next_step_handler(message,Stock_valuer)
+
+
+def Stock_valuer(message):
+    try:
+        tiker = str(message.text).upper().strip()
+        ticker_info = yf.Ticker(tiker)
+        current_price = ticker_info.history(period="1d")["Close"].iloc[-1]
+        bot.send_message(message.chat.id,f"Текущая цена акции {tiker}: ${current_price:.2f}")
+
+    except:
+        bot.send_message(message.chat.id, "Что-то пошло не так.")
+        Stock(message)
 
 def summa(message):
     global amount
@@ -266,7 +364,6 @@ def News(message):
     title = soup.find('a', class_='iKzE').text.strip()
     description = soup.find('p', class_="OIgY").text.strip()
     url = soup.find('a', class_='iKzE', href=True)['href'].strip()
-
     if url != new_post_url:
         new_post_url = url
         bot.send_message(message.chat.id, f"❗️<b>{str(title).upper()}</b>❗️\n\n<i>{description}</i>\n\nСсылка на пост: {url}",parse_mode='HTML')
@@ -1279,6 +1376,8 @@ def info(message):
                                                          "хррр",
                                                          "👁🐽👁"]))
         bot.send_photo(message.chat.id,"https://1drv.ms/i/c/d59c6f998f225afd/IQN22fvhqKbmQrrqUrji3AtqAQ3w_GN-bbfUSmTGCt6qrsU?width=1024")
+    elif any(word in message.text.lower() for word in ["привет","прив","хай","хелло","ку","здоров","алоха","хэй","чао","салют","хаю","хел","ватсап","салам","вечер в хату","добр","вечер","день","здрав","бонжур","hi","hello","what's up"]):
+        bot.send_message(message.chat.id,random.choice(["Привет!","Приветууули!","Доброго времени суток!","Хай :)","Салют!","Привет-привет!","Хааая ватсап","Бонжур","Здравствуй!","Утречка!.. Или доброго дня..или...Лан лан, Привет тебе!","Приветик!"]))
     else:
         bot.send_message(message.chat.id, random.choice(
             ["Да, это всё интересно, конечно.", "Понял тебя.. хотя может и не понял... в любом случае...", "Извольте.",
