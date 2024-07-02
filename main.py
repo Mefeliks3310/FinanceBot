@@ -62,7 +62,7 @@ def callback_message(callback):
     if callback.data == "4":
         Lesson_4(callback.message)
     if callback.data == "5":
-        bot.send_message(callback.message.chat.id, "В разработке.")
+       Lesson_5(callback.message)
 
     if callback.data == 'start_learning':
         bot.send_message(callback.message.chat.id, "Отлично! Начнем наше обучение! План состоит из 5 модулей:"
@@ -103,6 +103,12 @@ def callback_message(callback):
         markup.add(btn_con)
         bot.send_message(callback.message.chat.id, "Тогда переходим к следующему модулю!", reply_markup=markup)
         bot.register_next_step_handler(callback.message, Lesson_5)
+    if callback.data == "skip_test_5":
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(callback.message.chat.id, "Вы пропустили заключительный тест :)", reply_markup=markup)
+        bot.register_next_step_handler(callback.message, FINAL)
 
 
     if callback.data == "start_test_1":
@@ -113,6 +119,9 @@ def callback_message(callback):
         Test_3(callback.message)
     if callback.data == "start_test_4":
         Test_4(callback.message)
+    if callback.data == "start_test_5":
+        Test_5(callback.message)
+
 
 
     if callback.data == "tools_fenance":
@@ -1059,11 +1068,207 @@ def t4a5(message):
 def Lesson_5(message):
     markup = types.ReplyKeyboardRemove()
     bot.send_message(message.chat.id,
-                     '<b>❗️❕ФИНАЛ❕❗️</b>\n\nЭто пятый и ЗАКЛЮЧИТЕЛЬНЫЙ модуль. Этот модуль посвящен теме <b>.</b>\n\nЗдесь тебе дается небольшая статья по теме модуля и один объёмный видеоролик про то, '
-                     'как начать инвестировать в 2024 году. Начнем!',
+                     '<b>❗️❕ФИНАЛ❕❗️</b>\n\nЭто пятый и ЗАКЛЮЧИТЕЛЬНЫЙ модуль. Этот модуль посвящен теме <b>ОСНОВНЫЕ ФИНАНСОВЫЕ ПОКАЗАТЕЛИ.</b>\n\nЗдесь тебе дается небольшая статья по теме модуля и два видеорилка на ютубе! Начнем!',
                      reply_markup=markup, parse_mode="HTML")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Статья:\n\nhttps://telegra.ph/Osnovnye-finansovye-pokazateli-07-02")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Видеоролик про анализ отчетности и оценка бизнеса:\n\nhttps://www.youtube.com/watch?v=gkD91ij6FCs")
+    time.sleep(3)
+    bot.send_message(message.chat.id,"Видеоролик про 11 ключевых финансовых показателей в бизнесе\n\nhttps://www.youtube.com/watch?v=ID-78kRNud4")
+    markup = types.InlineKeyboardMarkup()
+    btn_skip = types.InlineKeyboardButton("Пропустить тест", callback_data="skip_test_5")
+    btn_start = types.InlineKeyboardButton("Начать тест", callback_data="start_test_5")
+    markup.add(btn_start, btn_skip)
+    time.sleep(3)
+    bot.send_message(message.chat.id, "Готов к тесту?", reply_markup=markup)
+
+def Test_5(message):
+    global qft
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+
+    qft = bot.send_photo(message.chat.id,
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQORuF10kOCwS4nWKpvaZhBSAZhRDF4rYV_-vZ0gol9oquI?width=1024",
+                         caption="<b>Что представляет собой чистая прибыль компании?</b>"
+                                 "\n\na) Прибыль компании после вычета всех расходов, включая налоги и проценты по долгам."
+                                 "\n\nb) Общая сумма денежных средств на счетах компании."
+                                 "\n\nc) Совокупная стоимость активов компании.", parse_mode="HTML",
+                         reply_markup=markup)
+    bot.register_next_step_handler(message, t5a1)
+def t5a1(message):
+    global qft
+    global aft
+    if message.text == "a":
+        aft = bot.send_message(message.chat.id, "Правильный ответ!✅")
+        bot.delete_message(message.chat.id, qft.message_id)
+        time.sleep(2)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q2(message)
+    else:
+        aft = bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                                "\n\nПравильный ответ - Прибыль компании после вычета всех расходов, включая налоги и проценты по долгам.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, qft.message_id)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q2(message)
 
 
+def t5q2(message):
+    global qft
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+
+    qft = bot.send_photo(message.chat.id,
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQOsHx1b7WgfRIL8d0KFbrhfAXlBJP834vbpQrgeoce3xMw?width=1024",
+                         caption="<b>Какой показатель отражает объём доходов, полученных компанией от продажи своих товаров и услуг?</b>"
+                                 "\n\na) EBITDA."
+                                 "\n\nb) Чистая прибыль."
+                                 "\n\nc) Выручка (Revenue).", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t5a2)
+
+
+def t5a2(message):
+    global qft
+    global aft
+    if message.text == "c":
+        aft = bot.send_message(message.chat.id, "Правильный ответ!✅")
+        bot.delete_message(message.chat.id, qft.message_id)
+        time.sleep(2)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q3(message)
+    else:
+        aft = bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                                "\n\nПравильный ответ - Выручка (Revenue).")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, qft.message_id)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q3(message)
+
+
+def t5q3(message):
+    global qft
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+
+    qft = bot.send_photo(message.chat.id,
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQP42YB5fnHYS4rM2auPT5gaAQIOT67SW5gp0sIUW40z48o?width=1024",
+                         caption="<b>Что означает аббревиатура EBITDA?</b>"
+                                 "\n\na) Ежегодная бухгалтерская отчётность компании."
+                                 "\n\nb) Прибыль до уплаты процентов, налогов, амортизации и амортизации (депрециации)."
+                                 "\n\nc) Стандарты бухгалтерского учёта.", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t5a3)
+
+
+def t5a3(message):
+    global qft
+    global aft
+    if message.text == "b":
+        aft = bot.send_message(message.chat.id, "Правильный ответ!✅")
+        bot.delete_message(message.chat.id, qft.message_id)
+        time.sleep(2)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q4(message)
+    else:
+        aft = bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                                "\n\nПравильный ответ - Прибыль до уплаты процентов, налогов, амортизации и амортизации (депрециации).")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, qft.message_id)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q4(message)
+
+
+def t5q4(message):
+    global qft
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+
+    qft = bot.send_photo(message.chat.id,
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQNedgI9wmrHTL5OybygoxpdAcRr_WRROc1uaskFWiOq9Lc?width=1024",
+                         caption="<b>Какой финансовый показатель отражает операционную прибыльность компании до уплаты процентов и налогов?</b>"
+                                 "\n\na) Чистая прибыль."
+                                 "\n\nb) EBITDA."
+                                 "\n\nc) Выручка (Revenue).", parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t5a4)
+
+
+def t5a4(message):
+    global qft
+    global aft
+    if message.text == "b":
+        aft = bot.send_message(message.chat.id, "Правильный ответ!✅")
+        bot.delete_message(message.chat.id, qft.message_id)
+        time.sleep(2)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q5(message)
+    else:
+        aft = bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                                "\n\nПравильный ответ - EBITDA.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, qft.message_id)
+        bot.delete_message(message.chat.id, aft.message_id)
+        t5q5(message)
+def t5q5(message):
+    global qft
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+
+    qft = bot.send_photo(message.chat.id,
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQNYfQI4xrHOR6xfAeX5UGIFAdNFr25F_oQQBR1s-hIfOLM?width=1024",
+                         caption="<b>Для чего используется показатель EBITDA при анализе финансового состояния компании?</b>"
+                                 "\n\na) Для оценки общего размера компании."
+                                 "\n\nb) Для определения стоимости акций компании."
+                                 "\n\nc) Для оценки операционной прибыльности компании, исключая влияние финансовых и налоговых факторов.",
+                         parse_mode="HTML", reply_markup=markup)
+    bot.register_next_step_handler(message, t5a5)
+def t5a5(message):
+    global qft
+    global aft
+    if message.text == "c":
+        aft = bot.send_message(message.chat.id, "Правильный ответ!✅")
+        bot.delete_message(message.chat.id, qft.message_id)
+        time.sleep(2)
+        bot.delete_message(message.chat.id, aft.message_id)
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(message.chat.id, "Ты успешно завершил тест!",
+                         reply_markup=markup)
+        bot.register_next_step_handler(message, Lesson_5)
+
+    else:
+        aft = bot.send_message(message.chat.id, "Неправильный ответ ❌"
+                                                "\n\nПравильный ответ - Для оценки операционной прибыльности компании, исключая влияние финансовых и налоговых факторов.")
+        time.sleep(5)
+        bot.delete_message(message.chat.id, qft.message_id)
+        bot.delete_message(message.chat.id, aft.message_id)
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(message.chat.id, "Ты успешно завершил тест!",
+                         reply_markup=markup)
+        bot.register_next_step_handler(message, FINAL())
+
+def FINAL(message):
+    markup = types.ReplyKeyboardRemove()
+    bot.send_message(message.chat.id,"Поздравляю вас с успешным звершением обучения всех 5-ти модулей!\n\nВы сделали это!\n\nДержи заслуженный сертификат!",reply_markup=markup)
+    bot.send_photo(message.chat.id,"https://1drv.ms/i/c/d59c6f998f225afd/IQMuQ34ciVHCSrynfUrMJbGSAQ7LVAGUrEBku8--c4S_ldc?width=1024")
+    bot.send_message(message.chat.id,"🎉")
 @bot.message_handler()
 def info(message):
     if any(word in message.text.lower() for word in ["хр","хрю","оньк","🐽"]):
