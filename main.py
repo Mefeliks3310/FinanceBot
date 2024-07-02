@@ -65,14 +65,12 @@ def callback_message(callback):
         bot.send_message(callback.message.chat.id, "В разработке.")
 
     if callback.data == 'start_learning':
-        bot.send_message(callback.message.chat.id, "Отлично! Начнем наше обучение! План состоит из 7 модулей:"
+        bot.send_message(callback.message.chat.id, "Отлично! Начнем наше обучение! План состоит из 5 модулей:"
                         "\n<b>1. Основы финансов</b>"
                          "\n<b>2. Финансовые рынки</b>"
                          "\n<b>3. Финансовые инструменты</b>"
                          "\n<b>4. Основы инвестирования</b>"
                          "\n<b>5. Основные финансовые показатели</b>"
-                         "\n<b>6. Личные финансы</b>"
-                         "\n<b>7. Экономические понятия</b>"
                         '\n\n Начнем с первого модуля "Основы финансов"', parse_mode= "HTML")
         time.sleep(3)
         bot.send_message(callback.message.chat.id, "Обучение будет проходить в следующем формате по частям:"
@@ -99,14 +97,22 @@ def callback_message(callback):
         markup.add(btn_con)
         bot.send_message(callback.message.chat.id, "Тогда переходим к следующему модулю!", reply_markup=markup)
         bot.register_next_step_handler(callback.message, Lesson_4)
+    if callback.data == "skip_test_4":
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(callback.message.chat.id, "Тогда переходим к следующему модулю!", reply_markup=markup)
+        bot.register_next_step_handler(callback.message, Lesson_5)
+
 
     if callback.data == "start_test_1":
         Test_1(callback.message)
-
     if callback.data == "start_test_2":
         Test_2(callback.message)
     if callback.data == "start_test_3":
         Test_3(callback.message)
+    if callback.data == "start_test_4":
+        Test_4(callback.message)
 
 
     if callback.data == "tools_fenance":
@@ -875,7 +881,7 @@ def Test_4(message):
     markup.row(a, b, c)
 
     qft = bot.send_photo(message.chat.id,
-                         "https://1drv.ms/i/c/d59c6f998f225afd/IQNBmdr2FZV9J7RX2GjZqN4bP6WjMV1vZ9lhA9Cvk9D3CkE?width=1024",
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQM7pyEIunT7TJF6pGfG7ctHAYQnjOff7c45TkEnMq_F2EU?width=1024",
                          caption="<b>Что включает в себя долгосрочное инвестирование?</b>"
                                  "\n\na) Инвестиции на срок менее одного года."
                                  "\n\nb) Инвестирование в активы с высокой волатильностью."
@@ -911,7 +917,7 @@ def t4q2(message):
     markup.row(a, b, c)
 
     qft = bot.send_photo(message.chat.id,
-                         "https://1drv.ms/i/c/s!Aq1Ej76kFj4XhSoWuJj6gOGLalJ7KtM?width=1024",
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQMX_X5gOkAMQKbkdhC2Q-vjATV7t-dlU5CP33WIDQBLJnM?width=1024",
                          caption="<b>Что такое пассивное инвестирование?</b>"
                                  "\n\na) Стратегия активного отслеживания изменений на рынке."
                                  "\n\nb) Инвестирование в фонды, отражающие структуру рынка или определённого индекса."
@@ -946,7 +952,7 @@ def t4q3(message):
     markup.row(a, b, c)
 
     qft = bot.send_photo(message.chat.id,
-                         "https://1drv.ms/i/c/d59c6f998f225afd/IQMQkEr_tDMwXLs8RkZfAaJqkCgZfeg-K1d2jS3HX10EYMQ?width=1024",
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQNe-tmIG-3jQ7oRxuZ33AcpAS1tZrKrX0H6K_ua07E6HJs?width=1024",
                          caption="<b>Что представляют собой основные принципы диверсификации портфеля?</b>"
                                  "\n\na) Концентрация инвестиций в один вид активов."
                                  "\n\nb) Инвестиции только в зарубежные компании."
@@ -982,7 +988,7 @@ def t4q4(message):
     markup.row(a, b, c)
 
     qft = bot.send_photo(message.chat.id,
-                         "https://1drv.ms/i/c/s!Aq1Ej76kFj4XhSpjAe8Q-4WQAP11b9A?width=1024",
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQPnRMtNZc77TpbC7iR8kvd9Act-tOKCD7fWL-xxfj00pr4?width=1024",
                          caption="<b>Какие цели могут быть достигнуты с помощью краткосрочного инвестирования?</b>"
                                  "\n\na) Накопление средств на покупку жилья."
                                  "\n\nb) Финансовая независимость в долгосрочной перспективе."
@@ -1006,6 +1012,23 @@ def t4a4(message):
         bot.delete_message(message.chat.id, qft.message_id)
         bot.delete_message(message.chat.id, aft.message_id)
         t4q5(message)
+
+def t4q5(message):
+    global qft
+    markup = types.ReplyKeyboardMarkup()
+    a = types.KeyboardButton('a')
+    b = types.KeyboardButton('b')
+    c = types.KeyboardButton('c')
+    markup.row(a, b, c)
+
+    qft = bot.send_photo(message.chat.id,
+                         "https://1drv.ms/i/c/d59c6f998f225afd/IQOtErJo__3kTpyQ_S0ZCOxiAd4mHNAMC_7P2aNSeBxWrLU?width=1024",
+                         caption="<b>Что включает в себя оценка рисков и доходности инвестиций?</b>"
+                                 "\n\na) Анализ только потенциала роста акций."
+                                 "\n\nb) Оценка вероятности получения прибыли и потерь при инвестировании."
+                                 "\n\nc) Анализ только текущего финансового состояния компаний.", parse_mode="HTML",
+                         reply_markup=markup)
+    bot.register_next_step_handler(message, t4a5)
 def t4a5(message):
     global qft
     global aft
@@ -1014,15 +1037,31 @@ def t4a5(message):
         bot.delete_message(message.chat.id, qft.message_id)
         time.sleep(2)
         bot.delete_message(message.chat.id, aft.message_id)
-        # Здесь можно добавить дополнительные действия после завершения теста, например, переход к следующему тесту или завершение тестирования.
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(message.chat.id, "Ты успешно завершил тест! Хотите перейти к следующему модулю?",
+                         reply_markup=markup)
+        bot.register_next_step_handler(message, Lesson_5)
+
     else:
         aft = bot.send_message(message.chat.id, "Неправильный ответ ❌"
                                                 "\n\nПравильный ответ - Оценка вероятности получения прибыли и потерь при инвестировании.")
         time.sleep(5)
         bot.delete_message(message.chat.id, qft.message_id)
         bot.delete_message(message.chat.id, aft.message_id)
+        markup = types.ReplyKeyboardMarkup()
+        btn_con = types.KeyboardButton("Продолжить")
+        markup.add(btn_con)
+        bot.send_message(message.chat.id, "Ты успешно завершил тест! Хотите перейти к следующему модулю?",
+                         reply_markup=markup)
+        bot.register_next_step_handler(message, Lesson_5)
 def Lesson_5(message):
-
+    markup = types.ReplyKeyboardRemove()
+    bot.send_message(message.chat.id,
+                     '<b>❗️❕ФИНАЛ❕❗️</b>\n\nЭто пятый и ЗАКЛЮЧИТЕЛЬНЫЙ модуль. Этот модуль посвящен теме <b>.</b>\n\nЗдесь тебе дается небольшая статья по теме модуля и один объёмный видеоролик про то, '
+                     'как начать инвестировать в 2024 году. Начнем!',
+                     reply_markup=markup, parse_mode="HTML")
 
 
 @bot.message_handler()
